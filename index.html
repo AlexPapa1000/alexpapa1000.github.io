@@ -4,45 +4,208 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Toy Physics: Catch Puzzle</title>
-<meta name="description" content="Toy Physics: Catch Puzzle, a physics puzzle game for iPhone, iPad and Android.">
+<meta name="description" content="Pack the toys. Share the magic. A hand-crafted physics puzzle game set in an old toymaker's workshop, for iPhone and iPad.">
 <link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <meta property="og:title" content="Toy Physics: Catch Puzzle">
 <meta property="og:description" content="Pack the toys. Share the magic.">
 <meta property="og:image" content="https://alexpapa1000.github.io/banner.jpg">
+<meta name="theme-color" content="#1a120b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg: #fdf8f0; --fg: #2b2118; --muted: #6b5d50; --link: #b5481f; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #1c1814; --fg: #f3ece2; --muted: #b3a697; --link: #f08a5d; }
+  :root {
+    --bg: #1a120b;
+    --bg-2: #24180e;
+    --wood: #3a2615;
+    --fg: #f5ead8;
+    --muted: #c4b098;
+    --gold: #e9c46a;
+    --gold-2: #c99a3d;
+    --line: rgba(233, 196, 106, .22);
   }
-  body { margin: 0; background: var(--bg); color: var(--fg);
-         font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  .banner { display: block; width: 100%; max-height: 420px; object-fit: cover; }
-  main { max-width: 560px; margin: 0 auto; padding: 40px 16px 64px; }
-  header { display: flex; align-items: center; gap: 16px; margin: 0 0 32px; }
-  header img { width: 80px; height: 80px; border-radius: 18px; flex: none; }
-  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 4px; }
-  header p { color: var(--muted); margin: 0; }
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { margin: 0 0 12px; }
-  a { color: var(--link); font-weight: 600; text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; color: var(--fg);
+    background:
+      radial-gradient(1200px 600px at 50% 0%, #3a2615 0%, transparent 70%),
+      linear-gradient(var(--bg-2), var(--bg) 600px);
+    background-color: var(--bg);
+    font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+  a { color: var(--gold); }
+
+  /* --- hero: the banner whole, never cropped, fading into the page --- */
+  .hero { position: relative; max-width: 1640px; margin: 0 auto; }
+  .hero img { display: block; width: 100%; height: auto; aspect-ratio: 1640 / 624; }
+  .hero::after {
+    content: ""; position: absolute; inset: auto 0 0 0; height: 28%;
+    background: linear-gradient(transparent, var(--bg-2));
+    pointer-events: none;
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+  /* --- title block --- */
+  .intro {
+    display: flex; align-items: center; gap: 24px;
+    margin: 0 auto; padding: 20px 0 44px; position: relative; z-index: 1;
+  }
+  .intro .icon {
+    width: 112px; height: 112px; border-radius: 26px; flex: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,.55), 0 0 0 1px var(--line);
+  }
+  h1 {
+    font-family: Cinzel, Georgia, serif; font-weight: 700;
+    font-size: clamp(28px, 4.2vw, 44px); line-height: 1.1;
+    margin: 0 0 6px; letter-spacing: .01em;
+    color: var(--gold);
+    text-shadow: 0 2px 0 rgba(0,0,0,.4);
+  }
+  .intro > div { min-width: 0; }
+  .tagline { margin: 0 0 18px; color: var(--muted); font-size: 18px; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+  .store-btn {
+    display: inline-flex; flex-direction: column; justify-content: center;
+    min-height: 54px; padding: 6px 22px;
+    background: #000; color: #fff; text-decoration: none;
+    border-radius: 12px; border: 1px solid #a6a6a6;
+    line-height: 1.15; transition: transform .15s, box-shadow .15s;
+  }
+  .store-btn small { font-size: 12px; letter-spacing: .02em; }
+  .store-btn span { font-size: 21px; font-weight: 600; letter-spacing: -.01em; }
+  .store-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.5); }
+  .soon { color: var(--muted); font-size: 15px; }
+
+  /* --- screenshots strip --- */
+  .shots { padding: 8px 0 56px; }
+  .shots-head {
+    display: flex; align-items: end; justify-content: space-between; gap: 16px;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: Cinzel, Georgia, serif; font-weight: 600;
+    font-size: 22px; margin: 0; color: var(--fg); letter-spacing: .04em;
+  }
+  .arrows { display: flex; gap: 8px; }
+  .arrows button {
+    width: 42px; height: 42px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--wood); color: var(--gold);
+    font-size: 20px; line-height: 1; cursor: pointer;
+  }
+  .arrows button:hover { background: #4a3119; }
+  .arrows button:disabled { opacity: .35; cursor: default; }
+  .strip {
+    display: flex; gap: 16px; overflow-x: auto;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 4px 16px 18px; margin: 0 -16px;
+    scrollbar-width: thin; scrollbar-color: var(--gold-2) transparent;
+  }
+  .strip::-webkit-scrollbar { height: 8px; }
+  .strip::-webkit-scrollbar-thumb { background: var(--gold-2); border-radius: 4px; }
+  .strip figure {
+    margin: 0; flex: 0 0 min(78%, 640px); scroll-snap-align: start;
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,.5), 0 0 0 1px var(--line);
+    background: var(--wood);
+  }
+  .strip img { display: block; width: 100%; height: auto; aspect-ratio: 1344 / 621; }
+
+  /* --- footer --- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px 0 40px; color: var(--muted); font-size: 15px;
+  }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
+  footer a { text-decoration: none; font-weight: 600; }
+  footer a:hover { text-decoration: underline; }
+  footer .copy { margin-left: auto; }
+
+  @media (max-width: 640px) {
+    .intro { flex-direction: column; align-items: flex-start; gap: 16px; padding-bottom: 32px; }
+    .intro .icon { width: 88px; height: 88px; border-radius: 20px; }
+    .arrows { display: none; }
+    .strip figure { flex-basis: 86%; }
+    footer .copy { margin-left: 0; width: 100%; }
+  }
+  @media (hover: none) { .arrows { display: none; } }
 </style>
 </head>
 <body>
-<img class="banner" src="banner.jpg" alt="The toymaker in his workshop: Pack the toys. Share the magic.">
-<main>
-  <header>
-    <img src="icon.png" alt="Toy Physics app icon">
+
+<div class="hero">
+  <img src="banner.jpg" width="1640" height="624"
+       alt="The old toymaker in his workshop, holding a wooden duck. Pack the toys. Share the magic.">
+</div>
+
+<main class="wrap">
+  <section class="intro">
+    <img class="icon" src="icon.png" width="112" height="112" alt="Toy Physics app icon">
     <div>
       <h1>Toy Physics: Catch Puzzle</h1>
-      <p>A physics puzzle game for iPhone, iPad and Android.</p>
+      <p class="tagline">Draw a line, catch the toy, and help the old toymaker pack every order.
+        A hand-crafted physics puzzle for iPhone and iPad.</p>
+      <div class="cta">
+        <a class="store-btn" href="https://apps.apple.com/us/app/toy-physics-catch-puzzle/id6809115657">
+          <small>Download on the</small><span>App Store</span>
+        </a>
+        <span class="soon">Coming soon to Google Play</span>
+      </div>
     </div>
-  </header>
-  <ul>
-    <li><a href="https://apps.apple.com/us/app/toy-physics-catch-puzzle/id6809115657">Download on the App Store</a></li>
-    <li><a href="https://sites.google.com/view/toyphysicshelp">Support</a></li>
-    <li><a href="https://sites.google.com/view/toyphysics">Privacy Policy</a></li>
-  </ul>
+  </section>
+
+  <section class="shots" aria-labelledby="shots-title">
+    <div class="shots-head">
+      <h2 id="shots-title">Inside the Workshop</h2>
+      <div class="arrows">
+        <button type="button" data-dir="-1" aria-label="Previous screenshot">&#8249;</button>
+        <button type="button" data-dir="1" aria-label="Next screenshot">&#8250;</button>
+      </div>
+    </div>
+    <div class="strip" id="strip" tabindex="0">
+      <figure><img src="shots/dolls.jpg" width="1344" height="621" alt="Every toy, a new challenge."></figure>
+      <figure><img src="shots/draw.jpg" width="1344" height="621" loading="lazy" alt="Draw a line. Catch the toy."></figure>
+      <figure><img src="shots/outsmart.jpg" width="1344" height="621" loading="lazy" alt="Outsmart the contraptions."></figure>
+      <figure><img src="shots/leaderboard.jpg" width="1344" height="621" loading="lazy" alt="Climb the toymaker leaderboard."></figure>
+      <figure><img src="shots/level_select.jpg" width="1344" height="621" loading="lazy" alt="Choose a level and earn stars."></figure>
+      <figure><img src="shots/store.jpg" width="1344" height="621" loading="lazy" alt="The Toy Physics main menu."></figure>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://sites.google.com/view/toyphysicshelp">Support</a>
+    <a href="https://sites.google.com/view/toyphysics">Privacy Policy</a>
+    <span class="copy">&copy; Alexander Papasavas</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var strip = document.getElementById('strip');
+    var buttons = document.querySelectorAll('.arrows button');
+    function step() {
+      var f = strip.querySelector('figure');
+      return f ? f.getBoundingClientRect().width + 16 : strip.clientWidth;
+    }
+    function update() {
+      var max = strip.scrollWidth - strip.clientWidth - 2;
+      buttons[0].disabled = strip.scrollLeft <= 2;
+      buttons[1].disabled = strip.scrollLeft >= max;
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        strip.scrollBy({ left: step() * Number(b.dataset.dir), behavior: 'smooth' });
+      });
+    });
+    strip.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
 </body>
 </html>
